@@ -3,7 +3,7 @@ import config
 import streamlit as st
 def get_activities():
     """Obtiene y muestra las 5 actividades más recientes del atleta"""
-    url = "https://www.strava.com/api/v3/athlete/activities"
+    url = f"{config.URL_API}/athlete/activities"
     headers = {"Authorization": f"Bearer {config.ACCESS_TOKEN}"}
 
     response = requests.get(url, headers=headers)
