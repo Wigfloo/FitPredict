@@ -3,7 +3,7 @@ import config
 import streamlit as st
 def get_athlete_data():
     """Obtiene y muestra la información del atleta"""
-    url = "https://www.strava.com/api/v3/athlete"
+    url = f"{config.URL_API}/athlete"
     headers = {"Authorization": f"Bearer {config.ACCESS_TOKEN}"}
 
     response = requests.get(url, headers=headers)
