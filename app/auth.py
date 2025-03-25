@@ -32,6 +32,7 @@ def getAccessToken():
         "grant_type": "authorization_code"
     }
     response = requests.post(uri_exchange, data=params)
+  
     if response.status_code == 200:
         getResponse = response.json()
         refresh_token = getResponse['refresh_token']
@@ -41,6 +42,7 @@ def getAccessToken():
         print("✅ Athlete:", athlete)
         #guardar session en el navegador de token y la informacion del usuario del 
         return True
+    
     else:
         print("❌ Error al obtener token:", response.status_code)
         print(response.json())
