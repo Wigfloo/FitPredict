@@ -14,6 +14,6 @@ def get_athlete_data():
     else:
         print("❌ Error al obtener datos:", response.status_code)
         print(response.json())
-
+ 
 # Llamar la función solo cuando se necesite
 # get_athlete_data()
