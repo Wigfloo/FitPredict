@@ -1,25 +1,30 @@
+import streamlit as st
 import auth
 import fetch_athlete
 import fetch_activities
-import streamlit as st
 import acces_code as acc
 
-#crear ruta de navegacion ,menu 
 def main():
-    # Validamos que el usuario tenga una sesion activa
-    if auth.checkAuthorization():
-        st.write("\n🏃‍♂️ Bienvenido a Strava CLI!")
-        st.write("1. Ver mi perfil")
-        st.write("2. Ver mis últimas actividades")
-        opcion = st.text_input("Selecciona una opción: ", key="opcion")
+    st.set_page_config(page_title="FitPredict - Strava Sync", page_icon="🏃")
+    st.title("🏃 Bienvenido a FitPredict")
+    st.write("Conectá tu cuenta de Strava para empezar a analizar tu rendimiento.")
 
-        if opcion == "1":
-            st.write(fetch_athlete.get_athlete_data())
-        elif opcion == "2":
-            st.write( fetch_activities.get_activities())
-        else:
-            st.write("❌ Opción inválida.")
+    # 1. Verificamos si ya existe un código de autorización en la URL (usuario ya autorizó)
+    if auth.checkAuthorization():
+        st.success("✅ Conexión con Strava exitosa!")
+        
+        # 2. Mostramos el menú de opciones
+        opcion = st.selectbox("¿Qué deseas hacer?", ["Selecciona una opción", "Ver mi perfil", "Ver mis últimas actividades"])
+
+        if opcion == "Ver mi perfil":
+            fetch_athlete.get_athlete_data()
+
+        elif opcion == "Ver mis últimas actividades":
+            fetch_activities.get_activities()
+
     else:
+        # 3. Si no hay código, mostramos el link para autorizar Strava
+        st.warning("🔒 Necesitás conectar tu cuenta de Strava para continuar.")
         acc.getAuthorization()
 
 if __name__ == "__main__":
