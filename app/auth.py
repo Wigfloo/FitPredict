@@ -17,6 +17,7 @@ def refresh_access_token():
     }
 
     response = requests.post(url, data=params)
+    
     if response.status_code == 200:
         new_tokens = response.json()
         config.ACCESS_TOKEN = new_tokens["access_token"]
