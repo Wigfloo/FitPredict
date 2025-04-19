@@ -6,7 +6,8 @@ load_dotenv()
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
+REFRESH_TOKEN = ''
+URL_API = os.getenv("URL_API")
 
 # Inicialmente, no hay un access token, se actualizará en automatizacion.py
 ACCESS_TOKEN = None
