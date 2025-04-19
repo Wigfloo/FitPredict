@@ -12,6 +12,7 @@ def get_athlete_data():
         st.write("✅ Datos del atleta:")
         st.write(response.json())
     else:
+
         st.write("❌ Error al obtener datos:", response.status_code)
         st.write(response.json())
 
