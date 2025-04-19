@@ -1,5 +1,4 @@
 import os
-import datos
 from dotenv import load_dotenv
 
 # Cargar variables de entorno desde .env
