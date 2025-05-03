@@ -1,0 +1,152 @@
+import random
+import pandas as pd
+from datetime import datetime, timedelta
+
+# ---------- Datos personales ----------
+def generar_datos_personas(n=10):
+    personas = []
+
+    # Crear los perfiles antes de generar personas
+    perfiles = [0, 1, 2] * ((n // 3) + 1)
+    random.shuffle(perfiles)
+
+    for i in range(n):
+        sexo = random.choice(['M', 'F'])
+        edad = random.randint(18, 50)
+
+        if sexo == 'M':
+            peso = round(random.uniform(65, 90), 1)
+            altura = round(random.uniform(1.70, 1.90), 2)
+        else:
+            peso = round(random.uniform(50, 70), 1)
+            altura = round(random.uniform(1.55, 1.75), 2)
+
+        imc = round(peso / (altura ** 2), 2)
+
+        persona = {
+            'ID_persona': f'P{i:03d}',
+            'Sexo': sexo,
+            'Edad': edad,
+            'Peso': peso,
+            'Altura': altura,
+            'IMC': imc,
+            'perfil': perfiles[i]  # 0 = elite, 1 = intermedio, 2 = novato
+        }
+
+        personas.append(persona)
+
+    return personas
+
+
+# ---------- Fechas aleatorias ----------
+
+def generar_fechas_random_año(num_fechas):
+    inicio = datetime(2024, 1, 1)
+    fin = datetime(2024, 12, 31)
+    dias_totales = (fin - inicio).days
+    fechas = random.sample(
+        [inicio + timedelta(days=i) for i in range(dias_totales)],
+        num_fechas
+    )
+    return sorted(fechas)
+
+# ---------- Generación de datos de entrenamiento ----------
+
+personas_info = generar_datos_personas(10)
+datos = []
+
+for idx, persona in enumerate(personas_info):
+    id_persona = persona['ID_persona']
+    edad = persona['Edad']
+    sexo = persona['Sexo']
+    peso = persona['Peso']
+    altura = persona['Altura']
+    imc = persona['IMC']
+
+    cantidad_entrenos = random.randint(100, 150)
+    fechas = generar_fechas_random_año(cantidad_entrenos)
+
+    fc_max_teorica = 226 - edad if sexo == 'F' else 220 - edad
+    fc_reposo = random.randint(45, 60)
+
+    # Asignar perfiles implícitos según índice
+    if idx < 3:  # atletas élite
+        ritmo_range = (3.5, 4.2)
+        distancia_range = (10000, 20000)
+        esfuerzo_base = 3
+    elif idx < 7:  # intermedios
+        ritmo_range = (5.0, 6.5)
+        distancia_range = (6000, 12000)
+        esfuerzo_base = 2
+    else:  # principiantes
+        ritmo_range = (7.0, 9.0)
+        distancia_range = (3000, 8000)
+        esfuerzo_base = 1
+
+    for fecha in fechas:
+        # Mejora progresiva con el tiempo
+        orden = fechas.index(fecha) / len(fechas)  # de 0 a 1
+        perfil = persona['perfil']  # 0 = elite, 1 = intermedio, 2 = novato
+
+        # Factores de mejora
+        mejora_ritmo = [0.02, 0.05, 0.1]  # cuanto más bajo, menos mejora
+        mejora_fc = [0.01, 0.03, 0.06]    # disminución de FC con entrenamiento
+
+        # Aplicar mejora al ritmo (tiempo disminuye, o sea velocidad sube)
+        tiempo = int(tiempo * (1 - orden * mejora_ritmo[perfil]))
+        tiempo = max(tiempo, 900)  # evitar que sea absurdamente bajo
+
+        # Después de calcular ritmo_min_km y antes de definir fc_prom
+
+        ritmo_min_km = round(random.uniform(*ritmo_range), 2)
+        distancia = random.randint(*distancia_range)
+        tiempo = int((ritmo_min_km * distancia) / 1000 * 60)  # tiempo en segundos
+
+        velocidad = distancia / tiempo
+        minutos = int(ritmo_min_km)
+        segundos = int((ritmo_min_km - minutos) * 60)
+        ritmo_formateado = f"{minutos}:{segundos:02d}"
+
+        fc_max = random.randint(fc_max_teorica - 5, fc_max_teorica + 5)
+
+        # FC promedio por esfuerzo
+        if esfuerzo_base == 3:
+            fc_prom = random.randint(fc_max - 15, fc_max - 5)
+        elif esfuerzo_base == 2:
+            fc_prom = random.randint(fc_max - 25, fc_max - 10)
+        else:
+            fc_prom = random.randint(fc_max - 35, fc_max - 15)
+
+        fc_prom = max(fc_prom, fc_reposo + 40)
+        # Mejorar FC con el tiempo (disminuye)
+        fc_prom = int(fc_prom * (1 - orden * mejora_fc[perfil]))
+
+        # Nunca menos que la FC de reposo + 30
+        fc_prom = max(fc_prom, fc_reposo + 30)
+
+        horas = tiempo // 3600
+        minutos_tiempo = (tiempo % 3600) // 60
+        tiempo_formato = f"{int(horas)}:{int(minutos_tiempo):02d}"
+
+        datos.append({
+            'ID_persona': id_persona,
+            'Sexo': sexo,
+            'Edad': edad,
+            'Peso_kg': peso,
+            'Altura_m': altura,
+            'IMC': imc,
+            'Fecha_actividad': fecha.strftime('%Y-%m-%d'),
+            'Tiempo_segundos': tiempo,
+            'Tiempo_horas': tiempo_formato,
+            'Distancia_metros': distancia,
+            'Ritmo_min_km': ritmo_min_km,
+            'Ritmo_formato': ritmo_formateado,
+            'Frecuencia_cardiaca_max': fc_max,
+            'Frecuencia_cardiaca_prom': fc_prom,
+            'Frecuencia_cardiaca_reposo': fc_reposo,
+            'Velocidad_promedio_mps': round(velocidad, 2),
+        })
+
+df = pd.DataFrame(datos)
+df.to_csv("datos_corredores.csv", index=False)
+df.head(10)
