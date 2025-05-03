@@ -1,5 +1,5 @@
 app/.env
 __pycache__/
 *.pyc
-firebase_credentials.json.json
+firebase_credentials.json
 *.csv
