@@ -5,8 +5,6 @@ from datetime import datetime, timedelta
 # ---------- Datos personales ----------
 def generar_datos_personas(n=10):
     personas = []
-
-    # Crear los perfiles antes de generar personas
     perfiles = [0, 1, 2] * ((n // 3) + 1)
     random.shuffle(perfiles)
 
@@ -37,9 +35,7 @@ def generar_datos_personas(n=10):
 
     return personas
 
-
 # ---------- Fechas aleatorias ----------
-
 def generar_fechas_random_año(num_fechas):
     inicio = datetime(2024, 1, 1)
     fin = datetime(2024, 12, 31)
@@ -51,7 +47,6 @@ def generar_fechas_random_año(num_fechas):
     return sorted(fechas)
 
 # ---------- Generación de datos de entrenamiento ----------
-
 personas_info = generar_datos_personas(10)
 datos = []
 
@@ -62,45 +57,46 @@ for idx, persona in enumerate(personas_info):
     peso = persona['Peso']
     altura = persona['Altura']
     imc = persona['IMC']
+    perfil = persona['perfil']
 
     cantidad_entrenos = random.randint(100, 150)
     fechas = generar_fechas_random_año(cantidad_entrenos)
 
     fc_max_teorica = 226 - edad if sexo == 'F' else 220 - edad
-    fc_reposo = random.randint(45, 60)
+    fc_reposo = random.randint(40, 50) if perfil == 0 else random.randint(45, 60)
 
-    # Asignar perfiles implícitos según índice
-    if idx < 3:  # atletas élite
+    if perfil == 0:  # elite
         ritmo_range = (3.5, 4.2)
         distancia_range = (10000, 20000)
-        esfuerzo_base = 3
-    elif idx < 7:  # intermedios
+        fc_range_inicial = (135, 155)
+        mejora_fc = 3
+        mejora_ritmo = 0.005
+    elif perfil == 1:  # intermedio
         ritmo_range = (5.0, 6.5)
         distancia_range = (6000, 12000)
-        esfuerzo_base = 2
-    else:  # principiantes
+        fc_range_inicial = (145, 165)
+        mejora_fc = 8
+        mejora_ritmo = 0.03
+    else:  # novato
         ritmo_range = (7.0, 9.0)
         distancia_range = (3000, 8000)
-        esfuerzo_base = 1
+        fc_range_inicial = (155, 175)
+        mejora_fc = 12
+        mejora_ritmo = 0.07
 
-    for fecha in fechas:
-        # Mejora progresiva con el tiempo
-        orden = fechas.index(fecha) / len(fechas)  # de 0 a 1
-        perfil = persona['perfil']  # 0 = elite, 1 = intermedio, 2 = novato
+    for i, fecha in enumerate(fechas):
+        progreso = i / len(fechas)  # de 0 a 1
 
-        # Factores de mejora
-        mejora_ritmo = [0.02, 0.05, 0.1]  # cuanto más bajo, menos mejora
-        mejora_fc = [0.01, 0.03, 0.06]    # disminución de FC con entrenamiento
+        # Menor variabilidad en el ritmo para la élite
+        if perfil == 0:
+            ritmo_min_km = round(random.uniform(ritmo_range[0] + 0.1, ritmo_range[1] - 0.1), 2)
+        else:
+            ritmo_min_km = round(random.uniform(*ritmo_range), 2)
 
-        # Aplicar mejora al ritmo (tiempo disminuye, o sea velocidad sube)
-        tiempo = int(tiempo * (1 - orden * mejora_ritmo[perfil]))
-        tiempo = max(tiempo, 900)  # evitar que sea absurdamente bajo
-
-        # Después de calcular ritmo_min_km y antes de definir fc_prom
-
-        ritmo_min_km = round(random.uniform(*ritmo_range), 2)
         distancia = random.randint(*distancia_range)
-        tiempo = int((ritmo_min_km * distancia) / 1000 * 60)  # tiempo en segundos
+        tiempo = int((ritmo_min_km * distancia) / 1000 * 60)
+        tiempo = int(tiempo * (1 - progreso * mejora_ritmo))
+        tiempo = max(tiempo, 900)
 
         velocidad = distancia / tiempo
         minutos = int(ritmo_min_km)
@@ -109,20 +105,10 @@ for idx, persona in enumerate(personas_info):
 
         fc_max = random.randint(fc_max_teorica - 5, fc_max_teorica + 5)
 
-        # FC promedio por esfuerzo
-        if esfuerzo_base == 3:
-            fc_prom = random.randint(fc_max - 15, fc_max - 5)
-        elif esfuerzo_base == 2:
-            fc_prom = random.randint(fc_max - 25, fc_max - 10)
-        else:
-            fc_prom = random.randint(fc_max - 35, fc_max - 15)
-
-        fc_prom = max(fc_prom, fc_reposo + 40)
-        # Mejorar FC con el tiempo (disminuye)
-        fc_prom = int(fc_prom * (1 - orden * mejora_fc[perfil]))
-
-        # Nunca menos que la FC de reposo + 30
-        fc_prom = max(fc_prom, fc_reposo + 30)
+        # Calcular FC promedio realista
+        fc_prom_inicial = random.randint(*fc_range_inicial)
+        fc_prom_mejorada = fc_prom_inicial - int(progreso * mejora_fc)
+        fc_prom = max(fc_prom_mejorada, fc_reposo + 15 if perfil == 0 else fc_reposo + 25) # Ajuste del margen
 
         horas = tiempo // 3600
         minutos_tiempo = (tiempo % 3600) // 60
@@ -148,5 +134,5 @@ for idx, persona in enumerate(personas_info):
         })
 
 df = pd.DataFrame(datos)
-df.to_csv("datos_corredores.csv", index=False)
+df.to_csv("datos_corredores2.csv", index=False)
 df.head(10)
