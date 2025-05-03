@@ -9,6 +9,8 @@ df.columns = df.columns.str.strip()
 def etiquetar_perfil(row):
     """
     Etiqueta el perfil de un corredor basado en sus características de entrenamiento.
+    Devuelve 'elite', 'intermedio' o 'novato'.
+    Devuelve None para los datos que no encajan claramente en estas categorías.
     """
     ritmo = row['Ritmo_min_km']
     distancia = row['Distancia_metros']
@@ -41,17 +43,15 @@ def etiquetar_perfil(row):
           fc_novato[0] <= fc_prom <= fc_novato[1]):
         return 'novato'
     else:
-        if ritmo <= ritmo_intermedio[0] and distancia >= distancia_intermedio[0] and fc_prom <= fc_intermedio[1]:
-            return 'intermedio'
-        elif ritmo <= ritmo_novato[0] and distancia >= distancia_novato[0] and fc_prom <= fc_novato[1]:
-            return 'novato'
-        else:
-            return 'desconocido'
+        return None  # Ya no devolvemos 'desconocido'
 
 # Aplicar la función de etiquetado al DataFrame
 df['Perfil'] = df.apply(etiquetar_perfil, axis=1)
 
-# Guardar el DataFrame con la nueva columna 'Perfil'
-df.to_csv("datos_etiquetados.csv", index=False)
+# Eliminar las filas donde la etiqueta 'Perfil' es None
+df_filtrado = df.dropna(subset=['Perfil'])
 
-print("DataFrame con etiquetas guardado en datos_etiquetados.csv")
+# Guardar el DataFrame filtrado con las etiquetas
+df_filtrado.to_csv("datos_etiquetados.csv", index=False)
+
+print("DataFrame con etiquetas (sin 'desconocido') guardado en datos_etiquetados.csv")
