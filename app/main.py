@@ -17,7 +17,7 @@ try:
     model_perfil = load_model("perfil.h5")
     with open("scaler.pkl", "rb") as file:
         scaler_perfil = pickle.load(file)
-    with open("label_encoder.pkl", 'rb') as file:
+    with open("label_encoder.pkl", "rb") as file:
         label_encoder_perfil = pickle.load(file)
 except FileNotFoundError as e:
     st.error(
