@@ -92,3 +92,45 @@ def get_data_for_model(per_page=100):
                 'Distancia_metros': distance_meters
             })
     return pd.DataFrame(data_for_model)
+
+def buscar_prueba_3k_strava():
+    """
+    Busca en las actividades recientes de Strava una posible prueba de 3000 metros
+    y devuelve un diccionario con los datos relevantes o None si no se encuentra.
+    """
+    activities = get_activities_raw(per_page=100) # Obtener más actividades para buscar
+    if not activities:
+        return None
+
+    posible_prueba = None
+    min_diferencia_distancia = float('inf')
+    datos_prueba = {}
+
+    for activity in activities:
+        if activity.get('type') == 'Run':
+            distancia_km = activity.get('distance', 0) / 1000.0
+            # Buscar actividades con una distancia cercana a 3k (ej. +/- 100 metros)
+            if 2.9 <= distancia_km <= 3.1:
+                diferencia = abs(distancia_km - 3.0)
+                if diferencia < min_diferencia_distancia:
+                    min_diferencia_distancia = diferencia
+                    posible_prueba = activity
+
+    if posible_prueba:
+        tiempo_segundos = posible_prueba.get('elapsed_time', 0)
+        distancia_metros = posible_prueba.get('distance', 0)
+        ritmo_s_m = 1 / posible_prueba.get('average_speed', 0.001) if posible_prueba.get('average_speed', 0) > 0 else np.nan
+        ritmo_min_km = (ritmo_s_m * 1000) / 60 if not np.isnan(ritmo_s_m) else np.nan
+        frecuencia_cardiaca_prom = posible_prueba.get('average_heartrate')
+        frecuencia_cardiaca_max = posible_prueba.get('max_heartrate')
+
+        datos_prueba = {
+            'Tiempo_segundos': tiempo_segundos,
+            'Ritmo_min_km': ritmo_min_km,
+            'Frecuencia_cardiaca_prom_3k': frecuencia_cardiaca_prom,
+            'Frecuencia_cardiaca_max_3k': frecuencia_cardiaca_max
+        }
+        return datos_prueba
+    else:
+        st.info("No se encontró automáticamente una prueba de 3000 metros reciente en tus actividades de Strava.")
+        return None
