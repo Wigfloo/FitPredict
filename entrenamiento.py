@@ -5,6 +5,7 @@ from tensorflow.keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 import numpy as np
+import pickle  # Importar la librería pickle
 
 # 1. Cargar los datos etiquetados
 df = pd.read_csv("datos_etiquetados.csv")
@@ -75,3 +76,12 @@ model.fit(X_train_scaled, y_train, epochs=50, batch_size=32, validation_data=(X_
 loss, accuracy = model.evaluate(X_test_scaled, y_test)
 print(f'Loss: {loss:.4f}')
 print(f'Accuracy: {accuracy:.4f}')
+
+# --- Guardar el modelo, el scaler y el label encoder ---
+model.save('tu_modelo_lstm.h5')
+with open('scaler.pkl', 'wb') as file:
+    pickle.dump(scaler, file)
+with open('label_encoder.pkl', 'wb') as file:
+    pickle.dump(label_encoder, file)
+
+print("✅ Modelo, scaler y label encoder guardados.")
