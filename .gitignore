@@ -6,4 +6,4 @@ firebase_credentials.json
 .venv/
 app/venv/
 .venv/
-app/.venv/
+app/.venv/git push origin main
