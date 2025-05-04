@@ -14,10 +14,10 @@ from datetime import datetime, timedelta
 
 # --- Cargar tu modelo, scaler y label encoder entrenados para el PERFIL ---
 try:
-    model_perfil = load_model('modelo_perfil/perfil.h5')
-    with open('modelo_perfil/scaler.pkl', 'rb') as file:
+    model_perfil = load_model('perfil.h5')
+    with open('scaler.pkl', 'rb') as file:
         scaler_perfil = pickle.load(file)
-    with open('modelo_perfil/label_encoder.pkl', 'rb') as file:
+    with open('label_encoder.pkl', 'rb') as file:
         label_encoder_perfil = pickle.load(file)
 except FileNotFoundError as e:
     st.error(
@@ -27,11 +27,11 @@ except FileNotFoundError as e:
 
 # --- Cargar los modelos y scaler entrenados para la PREDICCIÓN DE CARRERA ---
 try:
-    model_carrera_5k = pickle.load(open('modelo_carrera/modelo_5k.pkl', 'rb'))
+    model_carrera_5k = pickle.load(open('modelo_5k.pkl', 'rb'))
     model_carrera_10k = pickle.load(
-        open('modelo_carrera/modelo_10k.pkl', 'rb'))
+        open('modelo_10k.pkl', 'rb'))
     scaler_carrera = pickle.load(
-        open('modelo_carrera/scaler_3k_pred.pkl', 'rb'))
+        open('scaler_3k_pred.pkl', 'rb'))
 except FileNotFoundError as e:
     st.error(f"Error al cargar los archivos del modelo de carrera: {e}")
     st.stop()
