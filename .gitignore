@@ -4,3 +4,6 @@ __pycache__/
 firebase_credentials.json
 *.csv
 .venv/
+app/venv/
+.venv/
+app/.venv/
