@@ -14,10 +14,16 @@ from datetime import datetime, timedelta
 
 # --- Cargar tu modelo, scaler y label encoder entrenados para el PERFIL ---
 try:
-    model_perfil = load_model("perfil.h5")
-    with open("scaler.pkl", "rb") as file:
+    # La carpeta modelo_perfil ya no existe, el archivo está en la raíz, con f-string
+    ruta_modelo_perfil = f'perfil.h5'
+    model_perfil = load_model(ruta_modelo_perfil)
+    
+    ruta_scaler_perfil = f'scaler.pkl'
+    with open(ruta_scaler_perfil, 'rb') as file:
         scaler_perfil = pickle.load(file)
-    with open("label_encoder.pkl", "rb") as file:
+    
+    ruta_label_encoder_perfil = f'label_encoder.pkl'
+    with open(ruta_label_encoder_perfil, 'rb') as file:
         label_encoder_perfil = pickle.load(file)
 except FileNotFoundError as e:
     st.error(
@@ -27,14 +33,18 @@ except FileNotFoundError as e:
 
 # --- Cargar los modelos y scaler entrenados para la PREDICCIÓN DE CARRERA ---
 try:
-    model_carrera_5k = pickle.load(open("modelo_5k.pkl", 'rb'))
-    model_carrera_10k = pickle.load(
-        open("modelo_10k.pkl", "rb"))
-    scaler_carrera = pickle.load(
-        open("scaler_3k_pred.pkl", "rb"))
+    ruta_modelo_5k = f'modelo_5k.pkl'
+    model_carrera_5k = pickle.load(open(ruta_modelo_5k, 'rb'))
+    
+    ruta_modelo_10k = f'modelo_10k.pkl'
+    model_carrera_10k = pickle.load(open(ruta_modelo_10k, 'rb'))
+    
+    ruta_scaler_carrera = f'scaler_3k_pred.pkl'
+    scaler_carrera = pickle.load(open(ruta_scaler_carrera, 'rb'))
 except FileNotFoundError as e:
     st.error(f"Error al cargar los archivos del modelo de carrera: {e}")
     st.stop()
+
 
 N_STEPS = 1060  # Debe coincidir con la longitud de secuencia de tu modelo de PERFIL
 FEATURES = ['Frecuencia_cardiaca_prom', 'Ritmo_min_km', 'Distancia_metros']
