@@ -6,7 +6,6 @@ import acces_code as acc
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-# from tensorflow.keras.models import load_model
 import tensorflow as tf
 import pickle
 import requests
@@ -17,6 +16,7 @@ from datetime import datetime, timedelta
 try:
     # La carpeta modelo_perfil ya no existe, el archivo está en la raíz, con f-string
     ruta_modelo_perfil = f'perfil.h5'
+
     # model_perfil = load_model(ruta_modelo_perfil)
 
     load_model = tf.keras.models.load_model(ruta_modelo_perfil)
@@ -24,6 +24,7 @@ try:
     ruta_scaler_perfil = f'scaler.pkl'
     with open(ruta_scaler_perfil, 'rb') as file:
         scaler_perfil = pickle.load(file)
+
 
     ruta_label_encoder_perfil = f'label_encoder.pkl'
     with open(ruta_label_encoder_perfil, 'rb') as file:
@@ -39,8 +40,10 @@ try:
     ruta_modelo_5k = f'modelo_5k.pkl'
     model_carrera_5k = pickle.load(open(ruta_modelo_5k, 'rb'))
 
+
     ruta_modelo_10k = f'modelo_10k.pkl'
     model_carrera_10k = pickle.load(open(ruta_modelo_10k, 'rb'))
+
 
     ruta_scaler_carrera = f'scaler_3k_pred.pkl'
     scaler_carrera = pickle.load(open(ruta_scaler_carrera, 'rb'))
@@ -215,6 +218,7 @@ def main():
                                 )
                                 perfil_normalizado = predicted_profile.lower().strip()
 
+
                                 if perfil_normalizado == "elite":
                                     st.success(
                                         "¡Impresionante! Tu rendimiento te coloca en la categoría de atleta de élite. ¡Sigue así!")
@@ -233,6 +237,7 @@ def main():
                     else:
                         st.warning(
                             "No se encontraron actividades recientes para realizar la predicción.")
+
 
             elif opcion == "Predecir mi rendimiento en carrera (basado en prueba de 3k de Strava)":
                 st.subheader(
@@ -311,6 +316,7 @@ def main():
             st.warning(
                 "🔒 Necesitás conectar tu cuenta de Strava para continuar.")
             acc.getAuthorization()
+
 
 
 if __name__ == "__main__":
