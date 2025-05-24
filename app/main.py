@@ -6,7 +6,7 @@ import acces_code as acc
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-#from tensorflow.keras.models import load_model
+# from tensorflow.keras.models import load_model
 import tensorflow as tf
 import pickle
 import requests
@@ -17,14 +17,14 @@ from datetime import datetime, timedelta
 try:
     # La carpeta modelo_perfil ya no existe, el archivo está en la raíz, con f-string
     ruta_modelo_perfil = f'perfil.h5'
-    #model_perfil = load_model(ruta_modelo_perfil)
-    
+    # model_perfil = load_model(ruta_modelo_perfil)
+
     load_model = tf.keras.models.load_model(ruta_modelo_perfil)
-    
+
     ruta_scaler_perfil = f'scaler.pkl'
     with open(ruta_scaler_perfil, 'rb') as file:
         scaler_perfil = pickle.load(file)
-    
+
     ruta_label_encoder_perfil = f'label_encoder.pkl'
     with open(ruta_label_encoder_perfil, 'rb') as file:
         label_encoder_perfil = pickle.load(file)
@@ -38,10 +38,10 @@ except FileNotFoundError as e:
 try:
     ruta_modelo_5k = f'modelo_5k.pkl'
     model_carrera_5k = pickle.load(open(ruta_modelo_5k, 'rb'))
-    
+
     ruta_modelo_10k = f'modelo_10k.pkl'
     model_carrera_10k = pickle.load(open(ruta_modelo_10k, 'rb'))
-    
+
     ruta_scaler_carrera = f'scaler_3k_pred.pkl'
     scaler_carrera = pickle.load(open(ruta_scaler_carrera, 'rb'))
 except FileNotFoundError as e:
@@ -166,135 +166,151 @@ def predecir_perfil_con_ultimos_datos(strava_data):
 
 def main():
     st.set_page_config(page_title="FitPredict - Strava Sync", page_icon="🏃")
-    st.title("🏃 Bienvenido a FitPredict")
-    st.write("Conectá tu cuenta de Strava para empezar a analizar tu rendimiento.")
+
+    # Encabezado grande con estilo
+    st.markdown(
+         "<h1 style='text-align: center; color: #FF4B4B;'>🏃‍♂️ Bienvenido a <span style='color:#1E90FF;'>FitPredict</span></h1>",
+          unsafe_allow_html=True
+         )
+
+     # Subtítulo centrado
+    st.markdown(
+          "<p style='text-align: center; font-size:18px;'>Conectá tu cuenta de Strava para empezar a analizar tu rendimiento como un pro.</p>",
+          unsafe_allow_html=True
+          )
+
+      # Línea divisoria visual
+    st.markdown("<hr style='border:1px solid #ddd;'>",
+                   unsafe_allow_html=True)
 
     if auth.checkAuthorization():
-        st.success("✅ Conexión con Strava exitosa!")
+            st.success("✅ Conexión con Strava exitosa!")
 
-        opcion = st.selectbox(
-            "¿Qué deseas hacer?",
-            [
-                "Selecciona una opción",
-                "Ver mi perfil",
-                "Ver datos de actividad para el modelo y predecir perfil",
-                "Predecir mi rendimiento en carrera (basado en prueba de 3k de Strava)"
-            ],
-        )
+            opcion = st.selectbox(
+                "¿Qué deseas hacer?",
+                [
+                    "Selecciona una opción",
+                    "Ver mi perfil",
+                    "Ver datos de actividad para el modelo y predecir perfil",
+                    "Predecir mi rendimiento en carrera (basado en prueba de 3k de Strava)"
+                ],
+            )
 
-        if opcion == "Ver mi perfil":
-            fetch_athlete.get_athlete_data()
+            if opcion == "Ver mi perfil":
+                fetch_athlete.get_athlete_data()
 
-        elif opcion == "Ver datos de actividad para el modelo y predecir perfil":
-            if st.button("Obtener datos y predecir"):
-                with st.spinner("Obteniendo datos recientes de Strava..."):
-                    latest_activities = fetch_activities.get_activities_raw()
-                if latest_activities:
-                    with st.spinner("Preprocesando datos y prediciendo..."):
-                        predicted_profile, probabilities = predecir_perfil_con_ultimos_datos(
-                            latest_activities
-                        )
-
-                        if predicted_profile:
-                            st.subheader(
-                                f"Perfil predicho basado en las últimas actividades: {predicted_profile.upper()}"
+            elif opcion == "Ver datos de actividad para el modelo y predecir perfil":
+                if st.button("Obtener datos y predecir"):
+                    with st.spinner("Obteniendo datos recientes de Strava..."):
+                        latest_activities = fetch_activities.get_activities_raw()
+                    if latest_activities:
+                        with st.spinner("Preprocesando datos y prediciendo..."):
+                            predicted_profile, probabilities = predecir_perfil_con_ultimos_datos(
+                                latest_activities
                             )
-                            perfil_normalizado = predicted_profile.lower().strip()
 
-                            if perfil_normalizado == "elite":
-                                st.success(
-                                    "¡Impresionante! Tu rendimiento te coloca en la categoría de atleta de élite. ¡Sigue así!")
-                            elif perfil_normalizado == "intermedio":
-                                st.info(
-                                    "¡Muy bien! Estás en un nivel intermedio, mostrando un progreso constante. ¡Mantén el esfuerzo!")
-                            elif perfil_normalizado == "novato":
-                                st.warning(
-                                    "¡Excelente comienzo! Estás en la etapa de novato, cada entrenamiento cuenta. ¡No te rindas!")
+                            if predicted_profile:
+                                st.subheader(
+                                    f"Perfil predicho basado en las últimas actividades: {predicted_profile.upper()}"
+                                )
+                                perfil_normalizado = predicted_profile.lower().strip()
+
+                                if perfil_normalizado == "elite":
+                                    st.success(
+                                        "¡Impresionante! Tu rendimiento te coloca en la categoría de atleta de élite. ¡Sigue así!")
+                                elif perfil_normalizado == "intermedio":
+                                    st.info(
+                                        "¡Muy bien! Estás en un nivel intermedio, mostrando un progreso constante. ¡Mantén el esfuerzo!")
+                                elif perfil_normalizado == "novato":
+                                    st.warning(
+                                        "¡Excelente comienzo! Estás en la etapa de novato, cada entrenamiento cuenta. ¡No te rindas!")
+                                else:
+                                    st.write(
+                                        "No se pudo determinar un mensaje personalizado para este perfil.")
                             else:
-                                st.write(
-                                    "No se pudo determinar un mensaje personalizado para este perfil.")
-                        else:
-                            st.warning(
-                                "No se pudo realizar la predicción con los datos obtenidos.")
-                else:
-                    st.warning(
-                        "No se encontraron actividades recientes para realizar la predicción.")
-
-        elif opcion == "Predecir mi rendimiento en carrera (basado en prueba de 3k de Strava)":
-            st.subheader(
-                "Predicción de Rendimiento en Carrera usando datos de Strava (Prueba de 3k)")
-            prueba_3k_data = buscar_prueba_3k_strava()
-
-            if prueba_3k_data:
-                st.subheader("Datos Encontrados de Posible Prueba de 3k:")
-                st.write(
-                    f"Tiempo: {pd.Timedelta(seconds=int(prueba_3k_data['Tiempo_segundos']))}")
-                st.write(
-                    f"Ritmo Promedio: {prueba_3k_data['Ritmo_min_km']:.2f} min/km")
-                st.write(
-                    f"Frecuencia Cardíaca Promedio: {prueba_3k_data.get('Frecuencia_cardiaca_prom_3k', 'N/A')} bpm")
-                st.write(
-                    f"Frecuencia Cardíaca Máxima: {prueba_3k_data.get('Frecuencia_cardiaca_max_3k', 'N/A')} bpm")
-
-                st.subheader("Ingresa tus datos personales:")
-                sexo = st.selectbox("Sexo", ["Masculino", "Femenino"])
-                edad = st.number_input(
-                    "Edad", min_value=10, max_value=100, step=1)
-                peso_kg = st.number_input(
-                    "Peso (kg)", min_value=30.0, max_value=200.0, step=0.1)
-                altura_m = st.number_input(
-                    "Altura (m)", min_value=1.0, max_value=2.5, step=0.01)
-
-                if st.button("Predecir mi tiempo en carrera"):
-                    if prueba_3k_data['Ritmo_min_km'] is not np.nan and prueba_3k_data['Frecuencia_cardiaca_prom_3k'] is not None and prueba_3k_data['Frecuencia_cardiaca_max_3k'] is not None:
-                        sexo_encoded = 1 if sexo == "Masculino" else 0
-                        imc = peso_kg / (altura_m ** 2)
-
-                        input_data_carrera = pd.DataFrame({
-                            'Ritmo_3k_min_km': [prueba_3k_data['Ritmo_min_km']],
-                            'Frecuencia_cardiaca_prom_3k': [prueba_3k_data['Frecuencia_cardiaca_prom_3k']],
-                            'Frecuencia_cardiaca_max_3k': [prueba_3k_data['Frecuencia_cardiaca_max_3k']],
-                            'Sexo_encoded': [sexo_encoded],
-                            'Edad': [edad],
-                            'IMC': [imc]
-                        })
-
-                        input_scaled_carrera = scaler_carrera.transform(
-                            input_data_carrera)
-
-                        prediction_5k = model_carrera_5k.predict(
-                            input_scaled_carrera)
-                        prediction_10k = model_carrera_10k.predict(
-                            input_scaled_carrera)
-
-                        st.subheader("Predicciones de Rendimiento en Carrera:")
-                        st.write("**Predicción 5k:**")
-                        st.write(
-                            f"- Ritmo Promedio Estimado: {prediction_5k[0][0]:.2f} min/km")
-                        st.write(
-                            f"- Tiempo Estimado: {pd.Timedelta(seconds=int(prediction_5k[0][1]))}")
-                        st.write(
-                            f"- Frecuencia Cardíaca Promedio Estimada: {prediction_5k[0][2]:.2f} bpm")
-
-                        st.write("**Predicción 10k:**")
-                        st.write(
-                            f"- Ritmo Promedio Estimado: {prediction_10k[0][0]:.2f} min/km")
-                        st.write(
-                            f"- Tiempo Estimado: {pd.Timedelta(seconds=int(prediction_10k[0][1]))}")
-                        st.write(
-                            f"- Frecuencia Cardíaca Promedio Estimada: {prediction_10k[0][2]:.2f} bpm")
-
+                                st.warning(
+                                    "No se pudo realizar la predicción con los datos obtenidos.")
                     else:
                         st.warning(
-                            "No se encontraron datos suficientes de la prueba de 3k para realizar la predicción de carrera.")
+                            "No se encontraron actividades recientes para realizar la predicción.")
 
-            else:
-                st.info(
-                    "No se encontraron pruebas de 3000 metros recientes en tus actividades de Strava.")
+            elif opcion == "Predecir mi rendimiento en carrera (basado en prueba de 3k de Strava)":
+                st.subheader(
+                    "Predicción de Rendimiento en Carrera usando datos de Strava (Prueba de 3k)")
+                prueba_3k_data = buscar_prueba_3k_strava()
+
+                if prueba_3k_data:
+                    st.subheader("Datos Encontrados de Posible Prueba de 3k:")
+                    st.write(
+                        f"Tiempo: {pd.Timedelta(seconds=int(prueba_3k_data['Tiempo_segundos']))}")
+                    st.write(
+                        f"Ritmo Promedio: {prueba_3k_data['Ritmo_min_km']:.2f} min/km")
+                    st.write(
+                        f"Frecuencia Cardíaca Promedio: {prueba_3k_data.get('Frecuencia_cardiaca_prom_3k', 'N/A')} bpm")
+                    st.write(
+                        f"Frecuencia Cardíaca Máxima: {prueba_3k_data.get('Frecuencia_cardiaca_max_3k', 'N/A')} bpm")
+
+                    st.subheader("Ingresa tus datos personales:")
+                    sexo = st.selectbox("Sexo", ["Masculino", "Femenino"])
+                    edad = st.number_input(
+                        "Edad", min_value=10, max_value=100, step=1)
+                    peso_kg = st.number_input(
+                        "Peso (kg)", min_value=30.0, max_value=200.0, step=0.1)
+                    altura_m = st.number_input(
+                        "Altura (m)", min_value=1.0, max_value=2.5, step=0.01)
+
+                    if st.button("Predecir mi tiempo en carrera"):
+                        if prueba_3k_data['Ritmo_min_km'] is not np.nan and prueba_3k_data['Frecuencia_cardiaca_prom_3k'] is not None and prueba_3k_data['Frecuencia_cardiaca_max_3k'] is not None:
+                            sexo_encoded = 1 if sexo == "Masculino" else 0
+                            imc = peso_kg / (altura_m ** 2)
+
+                            input_data_carrera = pd.DataFrame({
+                                'Ritmo_3k_min_km': [prueba_3k_data['Ritmo_min_km']],
+                                'Frecuencia_cardiaca_prom_3k': [prueba_3k_data['Frecuencia_cardiaca_prom_3k']],
+                                'Frecuencia_cardiaca_max_3k': [prueba_3k_data['Frecuencia_cardiaca_max_3k']],
+                                'Sexo_encoded': [sexo_encoded],
+                                'Edad': [edad],
+                                'IMC': [imc]
+                            })
+
+                            input_scaled_carrera = scaler_carrera.transform(
+                                input_data_carrera)
+
+                            prediction_5k = model_carrera_5k.predict(
+                                input_scaled_carrera)
+                            prediction_10k = model_carrera_10k.predict(
+                                input_scaled_carrera)
+
+                            st.subheader(
+                                "Predicciones de Rendimiento en Carrera:")
+                            st.write("**Predicción 5k:**")
+                            st.write(
+                                f"- Ritmo Promedio Estimado: {prediction_5k[0][0]:.2f} min/km")
+                            st.write(
+                                f"- Tiempo Estimado: {pd.Timedelta(seconds=int(prediction_5k[0][1]))}")
+                            st.write(
+                                f"- Frecuencia Cardíaca Promedio Estimada: {prediction_5k[0][2]:.2f} bpm")
+
+                            st.write("**Predicción 10k:**")
+                            st.write(
+                                f"- Ritmo Promedio Estimado: {prediction_10k[0][0]:.2f} min/km")
+                            st.write(
+                                f"- Tiempo Estimado: {pd.Timedelta(seconds=int(prediction_10k[0][1]))}")
+                            st.write(
+                                f"- Frecuencia Cardíaca Promedio Estimada: {prediction_10k[0][2]:.2f} bpm")
+
+                        else:
+                            st.warning(
+                                "No se encontraron datos suficientes de la prueba de 3k para realizar la predicción de carrera.")
+
+                else:
+                    st.info(
+                        "No se encontraron pruebas de 3000 metros recientes en tus actividades de Strava.")
 
     else:
-        st.warning("🔒 Necesitás conectar tu cuenta de Strava para continuar.")
-        acc.getAuthorization()
+            st.warning(
+                "🔒 Necesitás conectar tu cuenta de Strava para continuar.")
+            acc.getAuthorization()
 
 
 if __name__ == "__main__":
