@@ -19,7 +19,7 @@ try:
     ruta_modelo_perfil = f'perfil.h5'
     #model_perfil = load_model(ruta_modelo_perfil)
     
-    load_model = tf.keras.models.load_model(ruta_modelo_perfil, custom_objects={'tf': tf})
+    load_model = tf.keras.models.load_model(ruta_modelo_perfil)
     
     ruta_scaler_perfil = f'scaler.pkl'
     with open(ruta_scaler_perfil, 'rb') as file:
