@@ -6,4 +6,3 @@ firebase_credentials.json
 *.egg-info/
 dist/
 build/
-venv/bin/activate

@@ -6,7 +6,8 @@ import acces_code as acc
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from tensorflow.keras.models import load_model
+#from tensorflow.keras.models import load_model
+import tensorflow as tf
 import pickle
 import requests
 import config
@@ -16,7 +17,9 @@ from datetime import datetime, timedelta
 try:
     # La carpeta modelo_perfil ya no existe, el archivo está en la raíz, con f-string
     ruta_modelo_perfil = f'perfil.h5'
-    model_perfil = load_model(ruta_modelo_perfil)
+    #model_perfil = load_model(ruta_modelo_perfil)
+    
+    load_model = tf.keras.models.load_model(ruta_modelo_perfil, custom_objects={'tf': tf})
     
     ruta_scaler_perfil = f'scaler.pkl'
     with open(ruta_scaler_perfil, 'rb') as file:
@@ -153,7 +156,7 @@ def predecir_perfil_con_ultimos_datos(strava_data):
         1, N_STEPS, len(FEATURES))
 
     # Realizar la predicción
-    predicciones = model_perfil.predict(persona_secuencia_scaled)
+    predicciones = load_model.predict(persona_secuencia_scaled)
     clase_predicha_encoded = np.argmax(predicciones)
     clase_predicha = label_encoder_perfil.inverse_transform(
         [clase_predicha_encoded])[0]
