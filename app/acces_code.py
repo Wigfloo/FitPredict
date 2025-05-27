@@ -1,8 +1,11 @@
 import streamlit as st
 import config
 
+
 def getAuthorization():
-    REDIRECT_URI = "https://fitpredict.streamlit.app/"  # O la URL pública de tu app
+
+    # URL donde va a llegar la autorización de strava
+    REDIRECT_URI = "http://localhost:8501"
 
     auth_url = f"https://www.strava.com/oauth/authorize?client_id={config.CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&approval_prompt=force&scope=read,activity:read"
 
