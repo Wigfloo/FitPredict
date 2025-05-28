@@ -8,4 +8,4 @@ dist/
 build/
 app/.env
 /temp
-app/.env
+/app/.env
