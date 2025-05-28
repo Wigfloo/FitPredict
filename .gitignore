@@ -9,3 +9,4 @@ build/
 app/.env
 /temp
 /app/.env
+.vscode/
