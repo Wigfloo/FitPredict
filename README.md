@@ -98,6 +98,80 @@ URL_API=https://www.strava.com/api/v3
 
 ---
 
+---
+
+## 12. Soporte y Comunidad
+
+Dado que FitPredict es un proyecto de código abierto con la intención de ser utilizado y modificado libremente por la comunidad, el soporte técnico formal no está centralizado. Sin embargo, te invitamos a:
+
+* **Reportar problemas y sugerir mejoras:** Utiliza la sección de [Issues](https://github.com/Wigfloo/FitPredict/issues) en el repositorio de GitHub para informar sobre cualquier error que encuentres o para proponer nuevas funcionalidades.
+* **Contribuir al proyecto:** Si tienes habilidades de desarrollo, te animamos a realizar un fork del repositorio y enviar tus propias modificaciones a través de [Pull Requests](https://github.com/Wigfloo/FitPredict/pulls).
+* **Interactuar con la comunidad:** Si se forma una comunidad alrededor del proyecto, podríamos considerar la creación de canales de comunicación como foros o salas de chat. Mantente atento al repositorio para futuras actualizaciones.
+
+**En resumen, el soporte se basa en la colaboración y las contribuciones de la comunidad de código abierto.**
+
+## 13. Glosario
+
+Puedes mantener el glosario que ya creaste en el manual de usuario aquí en el README también, o hacer referencia a la documentación más completa si es muy extenso. Por ejemplo:
+
+> Para un glosario de términos técnicos utilizados en este proyecto, por favor consulta la sección correspondiente en el [Manual de Usuario](link_al_manual_si_lo_tienes_aparte.md o #glosario-en-el-manual).
+
+Si lo incluyes directamente en el README:
+
+**Glosario:**
+
+* **API (Application Programming Interface):** ... (tu definición)
+* **Streamlit:** ... (tu definición)
+* **Firebase (Firestore):** ... (tu definición)
+* **Machine Learning (ML):** ... (tu definición)
+* **OAuth:** ... (tu definición)
+* **`REFRESH_TOKEN`:** ... (tu definición)
+* **`ACCESS_TOKEN`:** ... (tu definición)
+* **Entorno Virtual (venv):** ... (tu definición)
+* **Repositorio (Git):** ... (tu definición)
+
+## 14. Anexos (Opcional)**
+
+Si tienes información adicional que pueda ser útil pero no encaja en las secciones principales, puedes incluirla aquí. Por ejemplo:
+
+* **Contribución al Código:** Guías de estilo de código, proceso de envío de pull requests.
+* **Licencia de Terceros:** Información sobre las licencias de las librerías que utilizas.
+
+---
+
+## 2. Código Software
+
+El código fuente de FitPredict está disponible de forma abierta para que cualquiera pueda entender, reproducir, validar, usar y modificar el proyecto según los términos de la licencia adjunta.
+
+### 1. Organización del Código
+
+El código se organiza en los siguientes directorios principales:
+
+* **`/app/`**: Contiene la lógica principal de la aplicación Streamlit.
+    * `main.py`: Punto de entrada principal de la aplicación web.
+    * `auth.py`: Maneja la autenticación con la API de Strava.
+    * `requirements.txt`: Lista de dependencias necesarias para ejecutar la aplicación.
+    * `/models/`: Almacena los modelos de Machine Learning pre-entrenados (`perfil.h5`, `scaler.pkl`, `modelo_5k.pkl`, `modelo_10k.pkl`).
+* `.env`: Archivo para configurar variables de entorno sensibles (no rastreado por Git por seguridad).
+
+### 2. Documentación del Código
+
+* **`README.md`:** Este archivo proporciona una descripción general del proyecto, instrucciones de instalación y uso, requisitos del sistema, información de contacto y la licencia bajo la cual se distribuye el código.
+* **Comentarios en el Código:** Se han incluido comentarios dentro del código fuente para explicar la lógica de las funciones, clases y secciones complejas.
+* **Docstrings:** Las funciones y módulos importantes están documentados con docstrings para explicar su propósito, parámetros y valores de retorno (en el caso de Python).
+
+### 3. Control de Versiones
+
+El código de FitPredict se gestiona utilizando **Git** y se encuentra alojado en el repositorio de GitHub: [https://github.com/Wigfloo/FitPredict](https://github.com/Wigfloo/FitPredict). Te invitamos a explorar el historial de versiones, realizar forks del repositorio y contribuir con tus propias mejoras.
+
+### 4. Licencia
+
+Este proyecto se distribuye bajo la **[Elige aquí tu licencia de código abierto, por ejemplo: Licencia MIT](https://opensource.org/licenses/MIT)**.
+
+Se adjunta un archivo `LICENSE` en la raíz del repositorio con los términos completos de esta licencia. Esta licencia permite a otros usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar y/o vender copias del software, sujeto a las condiciones establecidas en la licencia. **Al utilizar, modificar o distribuir este software, aceptas los términos de la licencia.**
+
+---
+
 ## 👨‍💻 Autores
 
 **George Ibañez Canchila (Wigfloo)**  
