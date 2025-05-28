@@ -6,3 +6,5 @@ app/venv
 *.egg-info/
 dist/
 build/
+app/.env
+/temp
