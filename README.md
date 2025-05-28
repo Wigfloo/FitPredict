@@ -32,12 +32,7 @@
 ## 🗂 Estructura del proyecto
 
 ```
-¡Claro, pana! Vamos a organizar esa estructura de archivos en tu README para que quede bien claro dónde está cada cosa importante. Aquí te propongo una sección para añadir a tu README, justo después de la sección de "Cómo ejecutar el proyecto localmente" o antes de "Estado del proyecto":
-Markdown
-
----
-
-## 📂 Estructura del Proyecto
+📂 Estructura del Proyecto
 
 A continuación, se presenta una visión general de la estructura de archivos y directorios más relevantes dentro del repositorio de FitPredict:
 
