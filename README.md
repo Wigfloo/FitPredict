@@ -64,7 +64,7 @@ URL_API=https://www.strava.com/api/v3
    cd FitPredict
    ```
 
-2. Crear un entorno virtual:
+2. Crear un entorno virtual en app/:
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate

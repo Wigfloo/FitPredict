@@ -18,13 +18,11 @@ try:
     ruta_modelo_perfil = f'perfil.h5'
 
     # model_perfil = load_model(ruta_modelo_perfil)
-
     load_model = tf.keras.models.load_model(ruta_modelo_perfil)
 
     ruta_scaler_perfil = f'scaler.pkl'
     with open(ruta_scaler_perfil, 'rb') as file:
         scaler_perfil = pickle.load(file)
-
 
     ruta_label_encoder_perfil = f'label_encoder.pkl'
     with open(ruta_label_encoder_perfil, 'rb') as file:
@@ -40,10 +38,8 @@ try:
     ruta_modelo_5k = f'modelo_5k.pkl'
     model_carrera_5k = pickle.load(open(ruta_modelo_5k, 'rb'))
 
-
     ruta_modelo_10k = f'modelo_10k.pkl'
     model_carrera_10k = pickle.load(open(ruta_modelo_10k, 'rb'))
-
 
     ruta_scaler_carrera = f'scaler_3k_pred.pkl'
     scaler_carrera = pickle.load(open(ruta_scaler_carrera, 'rb'))
@@ -212,28 +208,65 @@ def main():
                                 latest_activities
                             )
 
+                            # --- INICIO DEL CÓDIGO COMBINADO (CODIGO 1) ---
                             if predicted_profile:
-                                st.subheader(
-                                    f"Perfil predicho basado en las últimas actividades: {predicted_profile.upper()}"
-                                )
+                                st.subheader(f"Perfil predicho basado en las últimas actividades: {predicted_profile.upper()}")
                                 perfil_normalizado = predicted_profile.lower().strip()
 
-
                                 if perfil_normalizado == "elite":
-                                    st.success(
-                                        "¡Impresionante! Tu rendimiento te coloca en la categoría de atleta de élite. ¡Sigue así!")
+                                    st.success("💪 ¡Impresionante! Tu rendimiento te coloca en la categoría de atleta de élite. ¡Sigue así!")
+
+                                    entrenamiento_elite = {
+                                        "Semana": [f"{i+1}" for i in range(8)],
+                                        "Día 1": ["Correr 10 km", "Fartlek: 5 min rápido x4", "Correr 15 km", "Intervalos: 10x1000m", "Correr 15 km", "Correr 9 km", "Fartlek: 8 min rápido x5", "Correr 15 km"],
+                                        "Día 2": ["Correr 10 km", "Descanso", "Correr 15 km", "Intervalos: 10x1000m", "Correr 15 km", "Descanso", "Fartlek: 8 min rápido x5", "Descanso"],
+                                        "Día 3": ["Descanso", "Fartlek: 5 min rápido x4", "Correr 15 km", "Fartlek: 8 min rápido x3", "Descanso", "Correr 9 km", "Descanso", "Correr 15 km"],
+                                        "Día 4": ["Correr 15 km", "Intervalos: 10x800m", "Descanso", "Descanso", "Correr 15 km", "Descanso", "Correr 15 km", "Descanso"],
+                                        "Día 5": ["Correr 15 km", "Intervalos: 10x800m", "Correr 18 km", "Fartlek: 8 min rápido x3", "Descanso", "Intervalos: 6x800m", "Descanso", "Correr 18 km"],
+                                        "Día 6": ["Descanso", "Intervalos: 10x800m", "Descanso", "Descanso", "Correr 18 km", "Descanso", "Correr 18 km", "Correr 20 km"],
+                                        "Día 7": ["Correr 7 km", "Descanso", "Correr 8 km", "Fartlek: 5 min rápido x3", "Descanso", "Intervalos: 6x800m", "Descanso", "Descanso"]
+                                    }
+                                    st.markdown("### 📋 Plan de entrenamiento (Élite)")
+                                    st.dataframe(entrenamiento_elite)
+
                                 elif perfil_normalizado == "intermedio":
-                                    st.info(
-                                        "¡Muy bien! Estás en un nivel intermedio, mostrando un progreso constante. ¡Mantén el esfuerzo!")
+                                    st.info("⚡ ¡Muy bien! Estás en un nivel intermedio, mostrando un progreso constante. ¡Mantén el esfuerzo!")
+
+                                    entrenamiento_intermedio = {
+                                        "Semana": [f"{i+1}" for i in range(8)],
+                                        "Día 1": ["Correr 4 km", "Correr 5 km", "Correr 5 km", "Fartlek: 1 min rápido x4", "Correr 6 km", "Correr 7 km", "Fartlek: 2 min rápido x4", "Correr 8 km"],
+                                        "Día 2": ["Descanso", "Correr 5 km", "Descanso", "Fartlek: 1 min rápido x4", "Descanso", "Descanso", "Fartlek: 2 min rápido x4", "Descanso"],
+                                        "Día 3": ["Correr 4 km", "Descanso", "Correr 5 km", "Descanso", "Correr 6 km", "Correr 7 km", "Descanso", "Correr 8 km"],
+                                        "Día 4": ["Descanso", "Correr 5 km", "Descanso", "Fartlek: 2 min rápido x4", "Descanso", "Descanso", "Correr 7 km", "Descanso"],
+                                        "Día 5": ["Correr 4 km", "Intervalos: 3x800m", "Correr 6 km", "Descanso", "Correr 6 km", "Intervalos: 4x800m", "Descanso", "Correr 10 km"],
+                                        "Día 6": ["Descanso", "Intervalos: 3x800m", "Descanso", "Fartlek: 2 min rápido x4", "Descanso", "Descanso", "Correr 7 km", "Descanso"],
+                                        "Día 7": ["Correr 5 km", "Descanso", "Correr 6 km", "Descanso", "Correr 6 km", "Intervalos: 4x800m", "Descanso", "Correr 10 km"]
+                                    }
+                                    st.markdown("### 📋 Plan de entrenamiento (Intermedio)")
+                                    st.dataframe(entrenamiento_intermedio)
+
                                 elif perfil_normalizado == "novato":
-                                    st.warning(
-                                        "¡Excelente comienzo! Estás en la etapa de novato, cada entrenamiento cuenta. ¡No te rindas!")
+                                    st.warning("🚀 ¡Excelente comienzo! Estás en la etapa de novato, cada entrenamiento cuenta. ¡No te rindas!")
+
+                                    entrenamiento_novato = {
+                                        "Semana": [f"{i+1}" for i in range(8)],
+                                        "Día 1": ["Caminar 20 min", "Caminar 5 min + trotar 1 min (x4)", "Trotar 1 min / caminar 1 min (x6)", "Trotar 2 min / caminar 1 min (x6)", "Trotar 3 min / caminar 1 min (x5)", "Trotar 5 min / caminar 1 min (x4)", "Trotar 7 min / caminar 1 min (x3)", "Correr 5 km suave"],
+                                        "Día 2": ["Descanso", "Caminar 30 min", "Trotar 1 min / caminar 1 min (x6)", "Trotar 2 min / caminar 1 min (x6)", "Descanso", "Trotar 5 min / caminar 1 min (x4)", "Descanso", "Descanso"],
+                                        "Día 3": ["Caminar 20 min", "Caminar 5 min + trotar 1 min (x4)", "Trotar 1 min / caminar 1 min (x6)", "Descanso", "Trotar 3 min / caminar 1 min (x5)", "Descanso", "Trotar 7 min / caminar 1 min (x3)", "Correr 5 km suave"],
+                                        "Día 4": ["Descanso", "Descanso", "Descanso", "Trotar 2 min / caminar 1 min (x6)", "Descanso", "Trotar 5 min / caminar 1 min (x4)", "Descanso", "Descanso"],
+                                        "Día 5": ["Caminar 25 min", "Caminar 5 min + trotar 1 min (x4)", "Trotar 1 min / caminar 1 min (x6)", "Descanso", "Trotar 3 min / caminar 1 min (x5)", "Descanso", "Trotar 7 min / caminar 1 min (x3)", "Correr 5 km suave"],
+                                        "Día 6": ["Descanso", "Caminar 30 min", "Trotar 1 min / caminar 1 min (x6)", "Trotar 2 min / caminar 1 min (x6)", "Descanso", "Descanso", "Descanso", "Descanso"],
+                                        "Día 7": ["Caminar 25 min", "Descanso", "Descanso", "", "Trotar 3 min / caminar 1 min (x5)", "", "Trotar 7 min / caminar 1 min (x3)", "Correr 5 km suave"]
+                                    }
+                                    st.markdown("### 📋 Plan de entrenamiento (Novato)")
+                                    st.dataframe(entrenamiento_novato)
+
                                 else:
-                                    st.write(
-                                        "No se pudo determinar un mensaje personalizado para este perfil.")
+                                    st.info("🔍 No se pudo determinar un perfil válido para mostrar un plan de entrenamiento.")
                             else:
-                                st.warning(
-                                    "No se pudo realizar la predicción con los datos obtenidos.")
+                                st.warning("❌ No se pudo realizar la predicción con los datos obtenidos.")
+                            # --- FIN DEL CÓDIGO COMBINADO (CODIGO 1) ---
+
                     else:
                         st.warning(
                             "No se encontraron actividades recientes para realizar la predicción.")
@@ -316,7 +349,6 @@ def main():
             st.warning(
                 "🔒 Necesitás conectar tu cuenta de Strava para continuar.")
             acc.getAuthorization()
-
 
 
 if __name__ == "__main__":
