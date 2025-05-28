@@ -98,7 +98,13 @@ URL_API=https://www.strava.com/api/v3
 
 ---
 
+## 4. Licencia
 
+Este proyecto se distribuye bajo la **Licencia MIT**.
+
+Se adjunta un archivo `LICENSE` en la raíz del repositorio con los términos completos de esta licencia. Esta licencia permite a otros usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar y/o vender copias del software, sujeto a las condiciones establecidas en la licencia. **Al utilizar, modificar o distribuir este software, aceptas los términos de la licencia.**
+
+---
 
 ## 👨‍💻 Autores
 
