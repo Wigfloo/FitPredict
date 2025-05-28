@@ -31,20 +31,30 @@
 
 ## 🗂 Estructura del proyecto
 
+```
+¡Claro, pana! Vamos a organizar esa estructura de archivos en tu README para que quede bien claro dónde está cada cosa importante. Aquí te propongo una sección para añadir a tu README, justo después de la sección de "Cómo ejecutar el proyecto localmente" o antes de "Estado del proyecto":
+Markdown
 
-* **`/app/`**: Contiene la lógica principal de la aplicación.
-    * `main.py`: El script principal que ejecuta la aplicación Streamlit.
-    * `auth.py`: Maneja la autenticación y conexión con la API de Strava.
-    * `requirements.txt`: Lista todas las librerías de Python necesarias para que la aplicación funcione. Debes instalar estas dependencias usando `pip install -r requirements.txt`.
-    * `/models/`: Almacena los modelos de Machine Learning pre-entrenados utilizados para el análisis y la predicción.
-        * `perfil.h5`: (Si aplica) Modelo para analizar características del perfil de usuario.
-        * `scaler.pkl`: Archivo que contiene el objeto `scaler` utilizado para normalizar o estandarizar los datos antes de ser introducidos en los modelos.
-        * `modelo_5k.pkl`: Modelo entrenado para predecir el tiempo en carreras de 5 kilómetros.
-        * `modelo_10k.pkl`: Modelo entrenado para predecir el tiempo en carreras de 10 kilómetros.
-* `.env`: Archivo donde se guardan las variables de entorno sensibles, como tus credenciales de la API de Strava. **Este archivo no debe compartirse públicamente.**
-* `README.md`: El archivo que estás leyendo, que proporciona una descripción general del proyecto, instrucciones de instalación y uso, entre otra información relevante.
+---
 
+## 📂 Estructura del Proyecto
 
+A continuación, se presenta una visión general de la estructura de archivos y directorios más relevantes dentro del repositorio de FitPredict:
+
+FitPredict/
+├── app/
+│   ├── main.py             # Punto de entrada principal de la aplicación Streamlit.
+│   ├── auth.py             # Lógica relacionada con la autenticación de usuarios (Strava).
+│   ├── requirements.txt    # Archivo que lista las dependencias necesarias para el proyecto.
+│   └── models/             # Directorio que contiene los modelos de Machine Learning pre-entrenados.
+│       ├── perfil.h5       # Modelo para el análisis de perfiles de usuario (si aplica).
+│       ├── scaler.pkl      # Archivo con el scaler utilizado para preprocesar los datos del modelo.
+│       ├── modelo_5k.pkl     # Modelo de Machine Learning para predicción de tiempos en carreras de 5k.
+│       └── modelo_10k.pkl    # Modelo de Machine Learning para predicción de tiempos en carreras de 10k.
+├── .env                    # Archivo para almacenar las variables de entorno (credenciales de Strava, etc.). Importante: No compartir.
+├── README.md               # Este archivo, con la descripción general del proyecto.
+└── ...                     # Otros archivos y directorios del proyecto.
+```
 
 ---
 
