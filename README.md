@@ -29,7 +29,7 @@
 
 ---
 
-##📂 Estructura del Proyecto
+📂 Estructura del Proyecto
 
 ```
 A continuación, se presenta una visión general de la estructura de archivos y directorios más relevantes dentro del repositorio de FitPredict:
