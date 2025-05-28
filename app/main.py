@@ -14,10 +14,8 @@ from datetime import datetime, timedelta
 
 # --- Cargar tu modelo, scaler y label encoder entrenados para el PERFIL ---
 try:
-    # La carpeta modelo_perfil ya no existe, el archivo está en la raíz, con f-string
     ruta_modelo_perfil = f'models/perfil.h5'
 
-    # model_perfil = load_model(ruta_modelo_perfil)
     load_model = tf.keras.models.load_model(ruta_modelo_perfil)
 
     ruta_scaler_perfil = f'models/scaler.pkl'
@@ -32,6 +30,7 @@ except FileNotFoundError as e:
         f"Error al cargar los archivos del modelo de perfil o preprocesamiento: {e}. Asegúrate de que los archivos estén en la misma ubicación que este script."
     )
     st.stop()
+
 
 # --- Cargar los modelos y scaler entrenados para la PREDICCIÓN DE CARRERA ---
 try:
@@ -57,10 +56,9 @@ def buscar_prueba_3k_strava():
     Busca en las actividades recientes de Strava una posible prueba de 3000 metros
     y devuelve un diccionario con los datos relevantes o None si no se encuentra.
     """
-    activities = fetch_activities.get_activities_raw(
-        per_page=100)  # Usar la función existente
+    activities = fetch_activities.get_activities_raw(per_page=100)  # Usar la función existente busca las ultimas 100 actividades
     if not activities:
-        return None
+        return None #no necesariamente da error si no encuentra 100 actividades, solo toma las que haya solo salta el error si no hay actividades
 
     posible_prueba = None
     min_diferencia_distancia = float('inf')
@@ -118,7 +116,7 @@ def predecir_perfil_con_ultimos_datos(strava_data):
             distance_meters = activity['distance']
             date_activity = activity['start_date_local']
 
-            # Calcular el ritmo en minutos por kilómetro
+            # Calcular el ritmo en minutos por kilómetro para que se vea mas bonito
             if speed_mps > 0:
                 ritmo_s_m = 1 / speed_mps
                 ritmo_min_km = (ritmo_s_m * 1000) / 60
@@ -141,7 +139,7 @@ def predecir_perfil_con_ultimos_datos(strava_data):
 
     persona_df = pd.DataFrame(data_for_model).sort_values(by='Fecha_actividad')
 
-    # Tomar las últimas N_STEPS actividades (o todas si son menos)
+    # Asegurarse de que las columnas estén en el orden correcto
     persona_secuencia = persona_df[FEATURES].tail(N_STEPS).values
 
     if len(persona_secuencia) < N_STEPS:
@@ -166,7 +164,7 @@ def predecir_perfil_con_ultimos_datos(strava_data):
 def main():
     st.set_page_config(page_title="FitPredict - Strava Sync", page_icon="🏃")
 
-    # Encabezado grande con estilo
+    # Encabezado grande con estilo ( si a eso se le puede llamar estilo)
     st.markdown(
         "<h1 style='text-align: center; color: #FF4B4B;'>🏃‍♂️ Bienvenido a <span style='color:#1E90FF;'>FitPredict</span></h1>",
         unsafe_allow_html=True
