@@ -31,7 +31,7 @@
 
 ## 🗂 Estructura del proyecto
 
-```
+
 * **`/app/`**: Contiene la lógica principal de la aplicación.
     * `main.py`: El script principal que ejecuta la aplicación Streamlit.
     * `auth.py`: Maneja la autenticación y conexión con la API de Strava.
@@ -44,7 +44,7 @@
 * `.env`: Archivo donde se guardan las variables de entorno sensibles, como tus credenciales de la API de Strava. **Este archivo no debe compartirse públicamente.**
 * `README.md`: El archivo que estás leyendo, que proporciona una descripción general del proyecto, instrucciones de instalación y uso, entre otra información relevante.
 
-```
+
 
 ---
 
