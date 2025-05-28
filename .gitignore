@@ -2,8 +2,7 @@ __pycache__/
 *.pyc
 firebase_credentials.json
 *.csv
-venv
-.venv 
+app/venv
 *.egg-info/
 dist/
 build/
