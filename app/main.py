@@ -24,7 +24,7 @@ try:
     with open(ruta_scaler_perfil, 'rb') as file:
         scaler_perfil = pickle.load(file)
 
-    ruta_label_encoder_perfil = f'label_encoder.pkl'
+    ruta_label_encoder_perfil = f'models/label_encoder.pkl'
     with open(ruta_label_encoder_perfil, 'rb') as file:
         label_encoder_perfil = pickle.load(file)
 except FileNotFoundError as e:
