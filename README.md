@@ -33,18 +33,11 @@
 
 ```
 FitPredict/
-├── .streamlit/            # Tema visual personalizado
-│   └── config.toml       # Configuración del tema Streamlit
 ├── app/
-│   └── main.py           # Vista principal de la app
-├── auth.py                # Manejo de la autorización con Strava
-├── config.py              # Carga de variables del entorno
-├── fetch_activities.py    # Obtención de actividades desde la API
-├── firebase_credentials.json  # (No incluido) Credenciales para Firebase
-├── scripts/
-│   └── cargar_a_mongo.py # (opcional) Script para cargar datos a MongoDB
-├── data/                  # Base de datos local o archivos temporales
-│   └── fitpredict.db     # Base SQLite (si se usó)
+│    │── main.py           # Vista principal de la app
+│    │── auth.py                # Manejo de la autorización con Strava
+│    │── config.py              # Carga de variables del entorno
+│    │── fetch_activities.py    # Obtención de actividades desde la API
 ├── requirements.txt       # Dependencias necesarias
 ├── README.md              # Este archivo :)
 ```
@@ -94,15 +87,18 @@ URL_API=https://www.strava.com/api/v3
 - [x] Conexión con Strava
 - [x] Sincronización y almacenamiento de entrenamientos
 - [x] Visualización en Streamlit
-- [ ] Entrenamiento del modelo de predicción
-- [ ] Dashboard personalizado con KPIs y gráficos
+- [x] Entrenamiento del modelo de predicción
 
 ---
 
 ## 👨‍💻 Autor
 
-**Wigfloo**  
+**George Ibañez Canchila (Wigfloo)**  
 Estudiante de Ingeniería en Telecomunicaciones, amante del software libre, el desarrollo en Linux y el deporte.
+
+**Matheo Enrique Herrera Zota**
+
+Estudiante de Ingeniería en Telecomunicaciones, Amante al arte y al diseño de sotfware
 
 ---
 
